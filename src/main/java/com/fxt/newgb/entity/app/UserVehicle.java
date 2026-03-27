@@ -26,6 +26,11 @@ public class UserVehicle extends BaseEntity {
      */
     private String imei;
 
+    /**
+     * 绑定状态：1-已绑定，0-已解绑
+     */
+    private String bindStatus;
+
     public Long getUserId() {
         return userId;
     }
@@ -56,6 +61,14 @@ public class UserVehicle extends BaseEntity {
 
     public void setImei(String imei) {
         this.imei = imei;
+    }
+
+    public String getBindStatus() {
+        return bindStatus;
+    }
+
+    public void setBindStatus(String bindStatus) {
+        this.bindStatus = bindStatus;
     }
 }
 

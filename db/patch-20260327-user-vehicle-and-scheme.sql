@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS user_vehicle (
     user_account VARCHAR(100),
     vehicle_id BIGINT,
     imei VARCHAR(32) NOT NULL,
+    bind_status CHAR(1) NOT NULL DEFAULT '1',
     create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     create_by BIGINT,
@@ -25,6 +26,7 @@ COMMENT ON COLUMN user_vehicle.user_id IS '用户ID';
 COMMENT ON COLUMN user_vehicle.user_account IS '用户账号';
 COMMENT ON COLUMN user_vehicle.vehicle_id IS '车辆ID';
 COMMENT ON COLUMN user_vehicle.imei IS 'IMEI';
+COMMENT ON COLUMN user_vehicle.bind_status IS '绑定状态：1-已绑定，0-已解绑';
 
 CREATE UNIQUE INDEX IF NOT EXISTS uk_user_vehicle_user_imei
     ON user_vehicle(user_id, imei) WHERE deleted = 0;
@@ -53,3 +55,4 @@ CREATE UNIQUE INDEX IF NOT EXISTS uk_vehicle_battery_scheme_imei
     ON vehicle_battery_scheme(imei) WHERE deleted = 0;
 CREATE INDEX IF NOT EXISTS idx_vehicle_battery_scheme_scheme_id
     ON vehicle_battery_scheme(scheme_id);
+

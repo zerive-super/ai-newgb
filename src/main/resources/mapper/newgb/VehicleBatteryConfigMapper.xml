@@ -40,9 +40,13 @@
         FROM battery_scheme
         WHERE deleted = 0
           AND status = '1'
+        <if test="batteryType != null and batteryType != ''">
           AND battery_type = #{batteryType}
+        </if>
+        <if test="batteryVoltage != null and batteryVoltage != ''">
           AND CAST(battery_voltage AS VARCHAR) = #{batteryVoltage}
-        ORDER BY sort ASC
+        </if>
+        ORDER BY id ASC
     </select>
 
 </mapper>

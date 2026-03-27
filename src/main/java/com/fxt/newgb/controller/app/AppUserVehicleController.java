@@ -1,7 +1,10 @@
 package com.fxt.newgb.controller.app;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fxt.newgb.common.response.R;
 import com.fxt.newgb.dto.app.UserVehicleBindDTO;
+import com.fxt.newgb.dto.app.UserVehiclePageQueryDTO;
 import com.fxt.newgb.dto.app.UserVehicleUnbindDTO;
 import com.fxt.newgb.service.app.AppUserVehicleService;
 import com.fxt.newgb.vo.app.UserVehicleVO;
@@ -51,5 +54,17 @@ public class AppUserVehicleController {
     @GetMapping("/user-vehicle/list")
     public R<List<UserVehicleVO>> list(@RequestParam Long userId) {
         return R.success(appUserVehicleService.list(userId));
+    }
+
+    /**
+     * 用户-车辆绑定分页查询
+     *
+     * @param query 分页与查询参数（用户账号、imei、绑定状态）
+     * @return 分页结果
+     */
+    @GetMapping("/user-vehicle/page")
+    public R<IPage<UserVehicleVO>> page(@Valid UserVehiclePageQueryDTO query) {
+        Page<UserVehicleVO> page = new Page<>(query.getCurrent(), query.getSize());
+        return R.success(appUserVehicleService.page(page, query));
     }
 }

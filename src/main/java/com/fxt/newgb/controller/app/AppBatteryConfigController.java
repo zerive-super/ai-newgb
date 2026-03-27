@@ -77,8 +77,8 @@ public class AppBatteryConfigController {
      */
     @GetMapping("/battery-scheme/options")
     public R<List<SchemeOptionVO>> getBatterySchemeOptions(
-            @RequestParam String batteryType,
-            @RequestParam String batteryVoltage) {
+            @RequestParam(required = false) String batteryType,
+            @RequestParam(required = false) String batteryVoltage) {
         List<SchemeOptionVO> options = appBatteryConfigService.getBatterySchemeOptions(batteryType, batteryVoltage);
         return R.success(options);
     }

@@ -8,24 +8,68 @@
         <result column="user_account" property="userAccount"/>
         <result column="vehicle_id" property="vehicleId"/>
         <result column="imei" property="imei"/>
+        <result column="bind_status" property="bindStatus"/>
+        <result column="scheme_id" property="schemeId"/>
+        <result column="scheme_name" property="schemeName"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <select id="selectListVO" resultMap="UserVehicleVOMap">
         SELECT
-            id,
-            user_id,
-            user_account,
-            vehicle_id,
-            imei,
-            create_time,
-            update_time
-        FROM user_vehicle
-        WHERE deleted = 0
-          AND user_id = #{userId}
-        ORDER BY id DESC
+            uv.id,
+            uv.user_id,
+            uv.user_account,
+            uv.vehicle_id,
+            uv.imei,
+            uv.bind_status,
+            vbs.scheme_id,
+            bs.scheme_name,
+            uv.create_time,
+            uv.update_time
+        FROM user_vehicle uv
+        LEFT JOIN vehicle_battery_scheme vbs
+               ON uv.imei = vbs.imei
+              AND vbs.deleted = 0
+        LEFT JOIN battery_scheme bs
+               ON vbs.scheme_id = bs.id
+              AND bs.deleted = 0
+        WHERE uv.deleted = 0
+          AND uv.user_id = #{userId}
+          AND uv.bind_status = '1'
+        ORDER BY uv.id DESC
+    </select>
+
+    <select id="selectPageVO" resultMap="UserVehicleVOMap">
+        SELECT
+            uv.id,
+            uv.user_id,
+            uv.user_account,
+            uv.vehicle_id,
+            uv.imei,
+            uv.bind_status,
+            vbs.scheme_id,
+            bs.scheme_name,
+            uv.create_time,
+            uv.update_time
+        FROM user_vehicle uv
+        LEFT JOIN vehicle_battery_scheme vbs
+               ON uv.imei = vbs.imei
+              AND vbs.deleted = 0
+        LEFT JOIN battery_scheme bs
+               ON vbs.scheme_id = bs.id
+              AND bs.deleted = 0
+        WHERE uv.deleted = 0
+        <if test="userAccount != null and userAccount != ''">
+            AND uv.user_account LIKE CONCAT('%', #{userAccount}, '%')
+        </if>
+        <if test="imei != null and imei != ''">
+            AND uv.imei = #{imei}
+        </if>
+        <if test="bindStatus != null and bindStatus != ''">
+            AND uv.bind_status = #{bindStatus}
+        </if>
+        ORDER BY uv.id DESC
     </select>
 
 </mapper>
-

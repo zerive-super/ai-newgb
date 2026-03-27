@@ -9,6 +9,9 @@ public class UserVehicleVO {
     private String userAccount;
     private Long vehicleId;
     private String imei;
+    private String bindStatus;
+    private Long schemeId;
+    private String schemeName;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
@@ -52,6 +55,30 @@ public class UserVehicleVO {
         this.imei = imei;
     }
 
+    public String getBindStatus() {
+        return bindStatus;
+    }
+
+    public void setBindStatus(String bindStatus) {
+        this.bindStatus = bindStatus;
+    }
+
+    public Long getSchemeId() {
+        return schemeId;
+    }
+
+    public void setSchemeId(Long schemeId) {
+        this.schemeId = schemeId;
+    }
+
+    public String getSchemeName() {
+        return schemeName;
+    }
+
+    public void setSchemeName(String schemeName) {
+        this.schemeName = schemeName;
+    }
+
     public LocalDateTime getCreateTime() {
         return createTime;
     }
@@ -68,4 +95,3 @@ public class UserVehicleVO {
         this.updateTime = updateTime;
     }
 }
-
