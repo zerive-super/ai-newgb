@@ -4,8 +4,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fxt.newgb.common.entity.BaseEntity;
 
+import java.time.LocalDateTime;
+
 @TableName("help_doc_content")
-public class HelpDocContent extends BaseEntity {
+public class HelpDocContent {
+
+    private Long id;
 
     /**
      * 关联帮助文档ID
@@ -26,6 +30,20 @@ public class HelpDocContent extends BaseEntity {
      * 配图URL
      */
     private String imageUrl;
+
+    private LocalDateTime createTime;
+
+    private LocalDateTime updateTime;
+
+    private Integer deleted;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getDocId() {
         return docId;
@@ -57,5 +75,29 @@ public class HelpDocContent extends BaseEntity {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
     }
 }
