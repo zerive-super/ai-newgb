@@ -1,0 +1,83 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: newgb-service
+
+  datasource:
+    url: jdbc:postgresql://172.18.7.20:5432/aurax_asset?currentSchema=aurax_asset&stringtype=unspecified&reWriteBatchedInserts=true
+    username: aurax_asset
+    password: aura@123
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+  data:
+    redis:
+      host: 172.172.100.192
+      port: 21312
+      password:
+      database: 0
+      timeout: 10000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1ms
+          max-idle: 8
+          min-idle: 0
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.newgb.**.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+logging:
+  level:
+    com.newgb: DEBUG
+    org.springframework: INFO
+
+knife4j:
+  enable: true
+  openapi:
+    title: 新国标电动车智能管理平台API
+    description: 新国标电动车智能管理平台后端接口文档
+    version: 1.0.0
+    group:
+      default:
+        group-name: default
+        api-rule: package
+        api-rule-resources:
+          - com.fxft.vehicle
+
+jwt:
+  secret: ebike-platform-jwt-secret-key-2024-very-long-secret-key
+  expiration: 86400000
+
+aura:
+  iam:
+    iam-config:
+      # IAM 认证服务地址
+      base-url: http://172.18.0.72:18082/api/iam-auth
+      # IAM 分配的应用标识
+      client-id: WJUb1HgoxiDcCnA6Oy
+      # IAM 分配的应用密钥
+      client-secret: KOqConF8xiOPb6mQP6JwJlNhxSVa65AQ

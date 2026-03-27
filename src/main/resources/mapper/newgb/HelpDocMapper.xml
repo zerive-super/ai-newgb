@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fxt.newgb.mapper.help.HelpDocMapper">
+
+    <resultMap id="HelpDocListVOMap" type="com.fxt.newgb.vo.app.HelpDocListVO">
+        <id column="id" property="id"/>
+        <result column="function_type" property="functionType"/>
+        <result column="function_type_name" property="functionTypeName"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+    <select id="selectListVO" resultMap="HelpDocListVOMap">
+        SELECT
+            hd.id,
+            hd.function_type,
+            CASE hd.function_type
+                WHEN 'VEHICLE_MANAGE' THEN '车辆管理'
+                WHEN 'BATTERY_CONFIG' THEN '电池配置'
+                WHEN 'ALARM' THEN '报警提醒'
+                WHEN 'SHARE' THEN '用车人管理'
+                WHEN 'LOCATION' THEN '车辆位置'
+                WHEN 'RIDING' THEN '骑行轨迹'
+            END AS function_type_name,
+            hd.title,
+            hd.description
+        FROM help_doc hd
+        WHERE hd.deleted = 0
+          AND hd.status = '1'
+        <if test="functionType != null and functionType != ''">
+            AND hd.function_type = #{functionType}
+        </if>
+        ORDER BY hd.sort ASC
+    </select>
+
+    <resultMap id="HelpDocSearchVOMap" type="com.fxt.newgb.vo.app.HelpDocSearchVO">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="match_snippet" property="matchSnippet"/>
+        <result column="function_type_name" property="functionTypeName"/>
+    </resultMap>
+
+    <select id="search" resultMap="HelpDocSearchVOMap">
+        SELECT DISTINCT
+            hd.id,
+            hd.title,
+            CASE
+                WHEN hdc.content ILIKE '%' || #{keyword} || '%'
+                THEN SUBSTRING(hdc.content, POSITION(#{keyword} IN hdc.content) - 20, 60)
+                ELSE ''
+            END AS match_snippet,
+            CASE hd.function_type
+                WHEN 'VEHICLE_MANAGE' THEN '车辆管理'
+                WHEN 'BATTERY_CONFIG' THEN '电池配置'
+                WHEN 'ALARM' THEN '报警提醒'
+                WHEN 'SHARE' THEN '用车人管理'
+                WHEN 'LOCATION' THEN '车辆位置'
+                WHEN 'RIDING' THEN '骑行轨迹'
+            END AS function_type_name
+        FROM help_doc hd
+        LEFT JOIN help_doc_content hdc ON hd.id = hdc.doc_id AND hdc.deleted = 0
+        WHERE hd.deleted = 0
+          AND hd.status = '1'
+          AND (
+              hd.title ILIKE '%' || #{keyword} || '%'
+              OR hd.description ILIKE '%' || #{keyword} || '%'
+              OR hdc.content ILIKE '%' || #{keyword} || '%'
+          )
+        ORDER BY hd.sort ASC
+    </select>
+
+</mapper>
