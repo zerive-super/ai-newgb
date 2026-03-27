@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fxt.newgb.mapper.app.VehicleBatterySchemeMapper">
+
+    <resultMap id="VehicleBatterySchemeVOMap" type="com.fxt.newgb.vo.app.VehicleBatterySchemeVO">
+        <id column="id" property="id"/>
+        <result column="imei" property="imei"/>
+        <result column="scheme_id" property="schemeId"/>
+        <result column="scheme_name" property="schemeName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectListVO" resultMap="VehicleBatterySchemeVOMap">
+        SELECT
+            vbs.id,
+            vbs.imei,
+            vbs.scheme_id,
+            bs.scheme_name,
+            vbs.create_time,
+            vbs.update_time
+        FROM vehicle_battery_scheme vbs
+        LEFT JOIN battery_scheme bs ON bs.id = vbs.scheme_id AND bs.deleted = 0
+        WHERE vbs.deleted = 0
+        <if test="imei != null and imei != ''">
+            AND vbs.imei = #{imei}
+        </if>
+        ORDER BY vbs.id DESC
+    </select>
+
+</mapper>
+
