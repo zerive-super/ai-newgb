@@ -19,7 +19,7 @@ public interface HelpDocMapper extends BaseMapper<HelpDoc> {
             "FROM help_doc hd " +
             "WHERE hd.deleted = 0 " +
             "<if test='title != null and title != \"\"'>" +
-            "AND hd.title LIKE CONCAT('%', #{title}, '%') " +
+            "AND hd.title ILIKE CONCAT('%', #{title}::text, '%') " +
             "</if>" +
             "<if test='functionType != null and functionType != \"\"'>" +
             "AND hd.function_type = #{functionType} " +
@@ -31,7 +31,7 @@ public interface HelpDocMapper extends BaseMapper<HelpDoc> {
     @Select("<script>" +
             "SELECT COUNT(*) FROM help_doc hd WHERE hd.deleted = 0 " +
             "<if test='title != null and title != \"\"'>" +
-            "AND hd.title LIKE CONCAT('%', #{title}, '%') " +
+            "AND hd.title LIKE CONCAT('%', #{title}::text, '%') " +
             "</if>" +
             "<if test='functionType != null and functionType != \"\"'>" +
             "AND hd.function_type = #{functionType} " +
@@ -51,8 +51,8 @@ public interface HelpDocMapper extends BaseMapper<HelpDoc> {
             "END AS functionTypeName " +
             "FROM help_doc hd " +
             "WHERE hd.deleted = 0 AND hd.status = '1' " +
-            "AND (hd.title LIKE CONCAT('%', #{keyword}, '%') " +
-            "OR EXISTS (SELECT 1 FROM help_doc_content hdc WHERE hdc.doc_id = hd.id AND hdc.content LIKE CONCAT('%', #{keyword}, '%'))) " +
+            "AND (hd.title ILIKE CONCAT('%', #{keyword}::text, '%') " +
+            "OR EXISTS (SELECT 1 FROM help_doc_content hdc WHERE hdc.doc_id = hd.id AND hdc.content ILIKE CONCAT('%', #{keyword}, '%'))) " +
             "LIMIT 20" +
             "</script>")
     List<HelpDocVO> searchByKeyword(@Param("keyword") String keyword);
@@ -88,16 +88,16 @@ public interface HelpDocMapper extends BaseMapper<HelpDoc> {
             "WHEN 'RIDING' THEN '骑行轨迹' " +
             "END AS functionTypeName, " +
             "CASE " +
-            "WHEN hdc.content ILIKE '%' || #{keyword} || '%' " +
+            "WHEN hdc.content ILIKE '%' || #{keyword}::text || '%' " +
             "THEN SUBSTRING(hdc.content, POSITION(#{keyword} IN hdc.content) - 20, 60) " +
             "ELSE '' " +
             "END AS matchSnippet " +
             "FROM help_doc hd " +
             "LEFT JOIN help_doc_content hdc ON hd.id = hdc.doc_id AND hdc.deleted = 0 " +
             "WHERE hd.deleted = 0 AND hd.status = '1' " +
-            "AND (hd.title ILIKE '%' || #{keyword} || '%' " +
-            "OR hd.description ILIKE '%' || #{keyword} || '%' " +
-            "OR hdc.content ILIKE '%' || #{keyword} || '%') " +
+            "AND (hd.title ILIKE '%' || #{keyword}::text || '%' " +
+            "OR hd.description ILIKE '%' || #{keyword}::text || '%' " +
+            "OR hdc.content ILIKE '%' || #{keyword}::text || '%') " +
             "ORDER BY hd.sort ASC" +
             "</script>")
     List<HelpDocSearchVO> search(@Param("keyword") String keyword);

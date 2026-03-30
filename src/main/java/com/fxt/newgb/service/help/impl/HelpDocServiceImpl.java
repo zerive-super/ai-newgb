@@ -139,7 +139,7 @@ public class HelpDocServiceImpl extends ServiceImpl<HelpDocMapper, HelpDoc> impl
         List<HelpDocContent> oldContents = helpDocContentMapper.selectList(wrapper);
         for (HelpDocContent content : oldContents) {
             content.setDeleted(1);
-            helpDocContentMapper.updateById(content);
+            helpDocContentMapper.deleteById(content);
         }
 
         // 6. 批量保存新说明内容数据
@@ -159,7 +159,7 @@ public class HelpDocServiceImpl extends ServiceImpl<HelpDocMapper, HelpDoc> impl
 
         // 2. 逻辑删除文档主表
         doc.setDeleted(1);
-        baseMapper.updateById(doc);
+        baseMapper.deleteById(doc);
 
         // 3. 同时逻辑删除关联的说明内容
         LambdaQueryWrapper<HelpDocContent> wrapper = new LambdaQueryWrapper<>();
@@ -167,7 +167,7 @@ public class HelpDocServiceImpl extends ServiceImpl<HelpDocMapper, HelpDoc> impl
         List<HelpDocContent> contents = helpDocContentMapper.selectList(wrapper);
         for (HelpDocContent content : contents) {
             content.setDeleted(1);
-            helpDocContentMapper.updateById(content);
+            helpDocContentMapper.deleteById(content);
         }
 
         return true;

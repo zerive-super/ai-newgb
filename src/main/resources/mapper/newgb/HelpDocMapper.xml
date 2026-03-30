@@ -38,14 +38,16 @@
         <result column="title" property="title"/>
         <result column="match_snippet" property="matchSnippet"/>
         <result column="function_type_name" property="functionTypeName"/>
+        <result column="sort" property="sort"/>
     </resultMap>
 
     <select id="search" resultMap="HelpDocSearchVOMap">
         SELECT DISTINCT
             hd.id,
             hd.title,
+            hd.sort,
             CASE
-                WHEN hdc.content ILIKE '%' || #{keyword} || '%'
+                WHEN hdc.content ILIKE '%' || #{keyword}::text || '%'
                 THEN SUBSTRING(hdc.content, POSITION(#{keyword} IN hdc.content) - 20, 60)
                 ELSE ''
             END AS match_snippet,
@@ -62,9 +64,9 @@
         WHERE hd.deleted = 0
           AND hd.status = '1'
           AND (
-              hd.title ILIKE '%' || #{keyword} || '%'
-              OR hd.description ILIKE '%' || #{keyword} || '%'
-              OR hdc.content ILIKE '%' || #{keyword} || '%'
+              hd.title ILIKE '%' || #{keyword}::text || '%'
+              OR hd.description ILIKE '%' || #{keyword}::text || '%'
+              OR hdc.content ILIKE '%' || #{keyword}::text || '%'
           )
         ORDER BY hd.sort ASC
     </select>

@@ -17,6 +17,8 @@ public class HelpDocSearchVO {
      */
     private String matchSnippet;
 
+    private Integer sort;
+
     /**
      * 功能类型名称
      */
@@ -52,5 +54,11 @@ public class HelpDocSearchVO {
 
     public void setFunctionTypeName(String functionTypeName) {
         this.functionTypeName = functionTypeName;
+    }
+    public Integer getSort() {
+        return sort;
+    }
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 }

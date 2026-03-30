@@ -18,7 +18,7 @@ public interface BatterySchemeMapper extends BaseMapper<BatteryScheme> {
             "FROM battery_scheme bs " +
             "WHERE bs.deleted = 0 " +
             "<if test='schemeName != null and schemeName != \"\"'>" +
-            "AND bs.scheme_name LIKE CONCAT('%', #{schemeName}, '%') " +
+            "AND bs.scheme_name ILIKE CONCAT('%', #{schemeName}::text, '%') " +
             "</if>" +
             "ORDER BY bs.create_time DESC" +
             "</script>")
@@ -27,7 +27,7 @@ public interface BatterySchemeMapper extends BaseMapper<BatteryScheme> {
     @Select("<script>" +
             "SELECT COUNT(*) FROM battery_scheme bs WHERE bs.deleted = 0 " +
             "<if test='schemeName != null and schemeName != \"\"'>" +
-            "AND bs.scheme_name LIKE CONCAT('%', #{schemeName}, '%') " +
+            "AND bs.scheme_name ILIKE CONCAT('%', #{schemeName}::text, '%') " +
             "</if>" +
             "</script>")
     Long selectPageCount(@Param("schemeName") String schemeName);

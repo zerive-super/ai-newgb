@@ -158,7 +158,7 @@ public class BatterySchemeServiceImpl extends ServiceImpl<BatterySchemeMapper, B
         // 2. 检查方案是否被车辆引用（暂略，未来调用车辆管理模块）
         // 3. 执行逻辑删除
         scheme.setDeleted(1);
-        baseMapper.updateById(scheme);
+        baseMapper.deleteById(scheme);
 
         // 4. 同时删除关联的规则数据
         LambdaQueryWrapper<BatterySchemeRule> wrapper = new LambdaQueryWrapper<>();
@@ -166,7 +166,7 @@ public class BatterySchemeServiceImpl extends ServiceImpl<BatterySchemeMapper, B
         List<BatterySchemeRule> rules = batterySchemeRuleMapper.selectList(wrapper);
         for (BatterySchemeRule rule : rules) {
             rule.setDeleted(1);
-            batterySchemeRuleMapper.updateById(rule);
+            batterySchemeRuleMapper.deleteById(rule);
         }
 
         return true;
